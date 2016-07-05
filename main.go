@@ -147,7 +147,12 @@ func ScalrWebhookHomePage(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
-
+	var IP string
+	if config.Data.SCALR_EVENT_EXTERNAL_IP != "" {
+		IP = config.Data.SCALR_EVENT_EXTERNAL_IP
+	} else {
+		IP = config.Data.SCALR_INTERNAL_IP
+	}
 	hostname := fmt.Sprintf("%s.acoe.com", config.Data.SCALR_EVENT_SERVER_HOSTNAME)
 	body := Config{
 		ServerURL: "http://192.168.201.211:8081",
@@ -155,7 +160,7 @@ func ScalrWebhookHomePage(w http.ResponseWriter, r *http.Request) {
 		Zone:      "acoe.com",
 		Inputs: Inputs{
 			Name:    hostname,
-			Content: config.Data.SCALR_EVENT_EXTERNAL_IP,
+			Content: IP,
 			Type:    "A",
 		},
 	}
